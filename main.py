@@ -1,33 +1,46 @@
+import numpy as np
 import matplotlib.pyplot as plt
+import euler as e 
 
-population_initiale = 100  
+# Paramètres du modèle Malthus
+population_initiale = 100
 ressources_initiales = 150  
 taux_croissance_population = 0.05  
 taux_croissance_ressources = 10  
-nombre_de_periodes = 50  
+nombre_de_periodes = 50
+h = 1  # Pas de temps (1 période)
+t = 1000  # Temps total de simulation
 
-populations = [population_initiale]
-ressources = [ressources_initiales]
+# Ajout pour le modèle de Verhulst
+capacité_porteuse = 200  # Capacité porteuse maximale de la population
 
-for periode in range(1, nombre_de_periodes + 1):
-    
-    nouvelle_population = populations[-1] * (1 + taux_croissance_population)
-    nouvelles_ressources = ressources[-1] + taux_croissance_ressources
+# Fonction pour la dérivée de la population, pour le modèle de Malthus (croissance exponentielle)
+def dPdt_Malthus(P, R):
+    return taux_croissance_population * P  # Croissance exponentielle de la population
 
-    populations.append(nouvelle_population)
-    ressources.append(nouvelles_ressources)
+# Fonction pour la dérivée de la population, pour le modèle de Verhulst (croissance logistique)
+def dPdt_Verhulst(P, R):
+    return taux_croissance_population * P * (1 - P / capacité_porteuse)
 
-plt.plot(range(nombre_de_periodes + 1), populations, label="Population")
-plt.plot(range(nombre_de_periodes + 1), ressources, label="Ressources")
+# Fonction pour la dérivée des ressources (croissance linéaire)
+def dRdt(P, R):
+    return taux_croissance_ressources  # Croissance linéaire des ressources (constante)
+
+# Appel de la fonction d'Euler pour le modèle de Malthus
+populations_Malthus, ressources_Malthus = e.euler(dPdt_Malthus, dRdt, population_initiale, ressources_initiales, t, nombre_de_periodes, h)
+
+# Appel de la fonction d'Euler pour le modèle de Verhulst
+populations_Verhulst, ressources_Verhulst = e.euler(dPdt_Verhulst, dRdt, population_initiale, ressources_initiales, t, nombre_de_periodes, h)
+
+# Tracer les résultats
+t_values = np.linspace(0, t, nombre_de_periodes + 1)  # Recalcul des valeurs de temps
+plt.plot(t_values, populations_Malthus, label="Population Malthus")
+plt.plot(t_values, ressources_Malthus, label="Ressources")
+plt.plot(t_values, populations_Verhulst, label="Population Verhulst")
 plt.axhline(0, color="black", linewidth=0.5, linestyle="--")
-plt.title("Simulation du modèle de Malthus")
+plt.title("Simulation des modèles de Malthus et Verhulst avec dérivées")
 plt.xlabel("Périodes")
 plt.ylabel("Valeurs")
 plt.legend()
 plt.grid()
 plt.show()
-
-
-
-if(__name__=="__main__"):
-    print("fonction principale")
