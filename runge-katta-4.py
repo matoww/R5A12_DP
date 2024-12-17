@@ -1,33 +1,64 @@
+import math
 #variables équations différentielles
-x0=1
+x0=0
 y0=3
-T=0.5
-n=3
+
+#t voulu 
+T=10
+
+#nombre de découpage de sous ensemble (va exécuter n fois runge kutta 4 en étant plus précis)
+n=10000
+
+#pas de discrétion
 h=T/n
 
 #equation 
 def fonctionX(x,y):
-    print(x+y)
     return x+y
 
 def fonctionY(x,y):
-    return y+x
+    return x*2
 
 #Résolution
 
-def rungeKatta4Iteration(equationX,equationY,x,y,h,nbIteration):
+def rungeKatta4IterationNormal(equationX,x,y,h,nbIteration):
     results=[(x,y)]
     for i in range(nbIteration):
-        x=rungeKatta4(equationX,results[i][0],results[i][1],h)
-        y=rungeKatta4(equationY,results[i][1],results[i][0],h)
+        y=rungeKatta4(equationX,x,y,h)
+        x+=h
+        results.append((x,y))
+    return results
+
+def rungeKatta4(equation,x,y,h):
+    k1=equation(x,y)
+    k2=equation(x+0.5*h,y+0.5*h*k1)
+    k3=equation(x+0.5*h,y+0.5*h*k2)
+    k4=equation(x+h,y+h*k3)
+    return y+(h/6)*(k1+2*k2+2*k3+k4)
+
+
+def rungeKatta4IterationSysteme(equationX,equationY,x,y,h,TVoulu):
+    results=[(x,y)]
+    for i in range(TVoulu):
+        x,y=rungeKatta4Systeme(equationX,equationY,x,y,h)
         results.append((x,y))
     return results    
 
-def rungeKatta4(equation,x,y,h):
-    k1=h*equation(x,y)
-    k2=h*equation(x+(h/2),y+(h/2)*k1)
-    k3=h*equation(x+(h/2),y+(h/2)*k2)
-    k4=h*equation(x+h,y+h*k3)
-    return x+(h/6)*(k1+2*k2+2*k3+k4)
-        
-print(rungeKatta4Iteration(fonctionX,fonctionY,x0,y0,h,4))
+def rungeKatta4Systeme(equationX,equationY,x,y,h):
+    
+    k1X=equationX(x,y)
+    k1Y=equationY(x,y)
+
+    k2X=equationX(x+0.5*h*k1X,y+0.5*h*k1Y)
+    k2Y=equationY(x+0.5*h*k1X,y+0.5*h*k1Y)
+
+    k3X=equationX(x+0.5*h*k2X,y+0.5*h*k2Y)
+    k3Y=equationY(x+0.5*h*k2X,y+0.5*h*k2Y)
+
+    k4X=equationX(x+h*k3X,y+h*k3Y)
+    k4Y=equationY(x+h*k3X,y+h*k3Y)
+
+    return x+(1/6)*h*(k1X+2*k2X+2*k3X+k4X), y+(1/6)*h*(k1Y+2*k2Y+2*k3Y+k4Y)
+
+if __name__=="__main__":
+    print(rungeKatta4IterationSysteme(fonctionX, fonctionY, x0, y0, h,n))
