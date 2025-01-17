@@ -2,9 +2,16 @@ import euler as e
 import rungeKatta4 as rk
 import numpy as np
 import matplotlib.pyplot as plt
-
+"""
+non fonctionnel pas eu le temps en l'absence de corentin
+"""
 
 def functionProie(x,y):
+    """
+    x : première variable du système d'équation
+    y : deuxième variable du système d'équation
+    retourne le résultat de la première fonction du système d'équation
+    """
     r=0.5 #taux de croissance des proies
     K=5000 #capacité maximale des proies
     m=15 #nombre maximale de proie consommable par un prédateur en une unité de temps
@@ -13,12 +20,20 @@ def functionProie(x,y):
     return result
  
 def functionPredateur(x,y):
+    """
+    x : première variable du système d'équation
+    y : deuxième variable du système d'équation
+    retourne le résultat de la première fonction du système d'équation
+    """
     s=-0.1 #taux de croissance des prédateurs
     h=0.1 #qualité de la nourriture des proies pour les prédateurs
     if x==0:
         x=1
     return s*y-(h*s*y*y)/x
-    
+
+"""
+calcul des termes de l'équation donné
+et traçage du graphe correspondant"""
 # Conditions initiales et paramètres
 N0 = 30  # Population initiale de sardines
 P0 = 300  # Population initiale de requins

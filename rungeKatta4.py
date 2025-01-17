@@ -1,27 +1,31 @@
-import math
-#variables équations différentielles
-x0=0
-y0=3
-
-#t voulu 
-T=10
-
-#nombre de découpage de sous ensemble (va exécuter n fois runge kutta 4 en étant plus précis)
-n=100
-
-#pas de discrétion
-h=T/n
-
-#equation 
+#equation
 def fonctionX(x,y):
+    """
+    x : première variable du système d'équation
+    y : deuxième variable du système d'équation
+    retourne le résultat de la première fonction du système d'équation
+    """
     return x+y
 
 def fonctionY(x,y):
+    """
+    x : première variable du système d'équation
+    y : deuxième variable du système d'équation
+    retourne le résultat de la deuxième fonction du système d'équation
+    """
     return x*2
 
 #Résolution
 
 def rungeKatta4IterationNormal(equationX,x,y,h,nbIteration):
+    """
+    equationX : fonction représentant x dans le système
+    x : x initial
+    y : y initial
+    h : pas de discretion
+    nbIteration : nombre de sous ensemble voulu
+    retourne le résultat du système d'équation où seul X est dépendant de l'autre variable
+    """
     results=[(x,y)]
     for i in range(nbIteration):
         y=rungeKatta4(equationX,x,y,h)
@@ -30,6 +34,13 @@ def rungeKatta4IterationNormal(equationX,x,y,h,nbIteration):
     return results
 
 def rungeKatta4(equation,x,y,h):
+    """
+    equation : fonction représentant le terme dont on veut calculer le prochain terme
+    x : terme non dépendant de l'autre
+    y : terme dont on veut calculer la prochaine valeur
+    h : pas de discrétion
+    calcul du prochain terme de l'équation différentielle
+    """
     k1=equation(x,y)
     k2=equation(x+0.5*h,y+0.5*h*k1)
     k3=equation(x+0.5*h,y+0.5*h*k2)
@@ -37,15 +48,31 @@ def rungeKatta4(equation,x,y,h):
     return y+(h/6)*(k1+2*k2+2*k3+k4)
 
 
-def rungeKatta4IterationSysteme(equationX,equationY,x,y,h,TVoulu,n):
+def rungeKatta4IterationSysteme(equationX,equationY,x,y,h,n):
+    """
+    equationX : fonction représentant x dans le système
+    equationY : fonction représentant y dans le système
+    x : x initial
+    y : y initial
+    h : pas de discretion
+    n : nombre de sous ensemble voulu
+    retourne le résultat du système d'équation où X et Y sont dépendants l'un de l'autre
+    """
     results=[(x,y)]
     for i in range(n):
         x,y=rungeKatta4Systeme(equationX,equationY,x,y,h)
         results.append((x,y))
-        print(x,y)
     return results    
 
 def rungeKatta4Systeme(equationX,equationY,x,y,h):
+    """
+    equationX : fonction représentant x dans le système
+    equationY : fonction représentant y dans le système
+    x : x au ènième terme
+    y : y au ènième terme
+    h : pas de discrétion
+    calcul du prochain terme de l'équation différentielle dans le cas d'un système possédant deux variables dépendantes de l'autre
+    """
     
     k1X=equationX(x,y)
     k1Y=equationY(x,y)
