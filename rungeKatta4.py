@@ -7,7 +7,7 @@ y0=3
 T=10
 
 #nombre de découpage de sous ensemble (va exécuter n fois runge kutta 4 en étant plus précis)
-n=10000
+n=100
 
 #pas de discrétion
 h=T/n
@@ -37,11 +37,12 @@ def rungeKatta4(equation,x,y,h):
     return y+(h/6)*(k1+2*k2+2*k3+k4)
 
 
-def rungeKatta4IterationSysteme(equationX,equationY,x,y,h,TVoulu):
+def rungeKatta4IterationSysteme(equationX,equationY,x,y,h,TVoulu,n):
     results=[(x,y)]
-    for i in range(TVoulu):
+    for i in range(n):
         x,y=rungeKatta4Systeme(equationX,equationY,x,y,h)
         results.append((x,y))
+        print(x,y)
     return results    
 
 def rungeKatta4Systeme(equationX,equationY,x,y,h):
@@ -59,6 +60,3 @@ def rungeKatta4Systeme(equationX,equationY,x,y,h):
     k4Y=equationY(x+h*k3X,y+h*k3Y)
 
     return x+(1/6)*h*(k1X+2*k2X+2*k3X+k4X), y+(1/6)*h*(k1Y+2*k2Y+2*k3Y+k4Y)
-
-if __name__=="__main__":
-    print(rungeKatta4IterationSysteme(fonctionX, fonctionY, x0, y0, h,n))

@@ -1,6 +1,7 @@
 import euler as e
 import numpy as np
 import matplotlib.pyplot as plt
+import rungeKatta4 as rk
 
 
 def sardine(N, P):
@@ -31,11 +32,19 @@ n = 1000 # Nombre de pas de temps
 h = t / n  # Pas de temps
 
 sardines, requins = e.euler(sardine_avec_peche,requin,N0, P0, t, n, h)
+sardinesRequinsRK4 = rk.rungeKatta4IterationSysteme(sardine_avec_peche,requin,N0,P0,h,t,n)
+sardinesRK4=[]
+requinsRK4=[]
+for i in sardinesRequinsRK4:
+    sardinesRK4.append(i[0])
+    requinsRK4.append(i[1])
 
 
 t_values = np.linspace(0, t, n+1)
 plt.plot(t_values, sardines, label='Sardines (N)')
 plt.plot(t_values, requins, label='Requins (P)')
+plt.plot(t_values, sardinesRK4, label='Sardines RK4 (N)')
+plt.plot(t_values, requinsRK4, label='Requins RK4(P)')
 plt.xlabel('Temps (t)')
 plt.ylabel('Population')
 plt.legend()
