@@ -27,8 +27,8 @@ def requin(N,P):
 # Conditions initiales et paramètres
 N0 = 30  # Population initiale de sardines
 P0 = 10  # Population initiale de requins
-t = 100  # Temps total
-n = 1000 # Nombre de pas de temps
+t = 1000  # Temps total
+n = 50000 # Nombre de pas de temps
 h = t / n  # Pas de temps
 
 sardines, requins = e.euler(sardine_avec_peche,requin,N0, P0, t, n, h)
@@ -41,14 +41,14 @@ for i in sardinesRequinsRK4:
 
 
 t_values = np.linspace(0, t, n+1)
-plt.plot(t_values, sardines, label='Sardines (N)')
-plt.plot(t_values, requins, label='Requins (P)')
+plt.plot(t_values, sardines, label='Sardines Euleur (N)')
+plt.plot(t_values, requins, label='Requins Euleur (P)')
 plt.plot(t_values, sardinesRK4, label='Sardines RK4 (N)')
 plt.plot(t_values, requinsRK4, label='Requins RK4(P)')
 plt.xlabel('Temps (t)')
 plt.ylabel('Population')
 plt.legend()
-plt.title("Résolution par la méthode d'Euler")
+plt.title("Dynamiques des populations de sardines et de requins")
 plt.grid()
 plt.show()
 
